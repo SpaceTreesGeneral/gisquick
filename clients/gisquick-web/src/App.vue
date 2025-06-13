@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app f-col">
-    <intro-page v-if="!projectName"/>
+    <intro-page v-if="!projectName" dashboard-only/>
     <map-app v-if="projectStatus === 200" :key="projectKey"/>
     <login-dialog
       :value="showLogin"

@@ -76,7 +76,7 @@ export default {
       owsUrl: config.ows_url,
       legendUrl: config.legend_url,
       mapcacheUrl: config.mapcache_url,
-      mapTiling: config.map_tiling
+      mapTiling: true
     }
     const map = createMap(mapConfig, { zoom: false, attribution: false, rotate: false })
     Vue.prototype.$map = map

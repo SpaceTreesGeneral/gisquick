@@ -250,7 +250,9 @@ export default {
       if (this.user.is_guest) return
       this.loadingProjects = true
       try {
-        const { data } = await this.$http.get('/api/projects/')
+        const projectsList = this.user.profile?.dashboard_projects
+        const params = projectsList ? { projects: projectsList.join(',') } : { filter: 'accessible' }
+        const { data } = await this.$http.get('/api/projects/', { params })
         this.userProjects = Array.isArray(data) ? data : oldApiProjects(data) // compatibility with old API
       } finally {
         this.loadingProjects = false

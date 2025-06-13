@@ -130,25 +130,8 @@ export default {
         url.searchParams.set('DPI', this.dpi)
       }
       // fetch whole legend in single request
-      url.searchParams.set('LAYERS', this.legendLayers.map(l => l.name).join(','))
-
-      const { data } = await watchTask(this.$http.get(url.toString()), this.task)
-      this.legendList = this.legendLayers.map(l => {
-        if (l.legend_url) {
-          return {
-            layer: l,
-            type: 'link',
-            url: l.legend_url
-          }
-        }
-        return {
-          layer: l,
-          type: 'image',
-          data: data.nodes.find(n => n.type === 'layer' && (n.title === l.title || n.title === l.name))
-        }
-      })
-
-      // fetch legend of each layer separately
+      // url.searchParams.set('LAYERS', this.legendLayers.map(l => l.name).join(','))
+      // const { data } = await watchTask(this.$http.get(url.toString()), this.task)
       // this.legendList = this.legendLayers.map(l => {
       //   if (l.legend_url) {
       //     return {
@@ -157,17 +140,33 @@ export default {
       //       url: l.legend_url
       //     }
       //   }
-      //   url.searchParams.set('LAYER', l.name)
-      //   const data = {
+      //   return {
       //     layer: l,
       //     type: 'image',
-      //     data: null
+      //     data: data.nodes.find(n => n.type === 'layer' && (n.title === l.title || n.title === l.name))
       //   }
-      //   this.$http.get(url.toString()).then(resp => {
-      //     data.data = resp.data.nodes[0]
-      //   })
-      //   return data
       // })
+
+      // fetch legend of each layer separately
+      this.legendList = this.legendLayers.map(l => {
+        if (l.legend_url) {
+          return {
+            layer: l,
+            type: 'link',
+            url: l.legend_url
+          }
+        }
+        url.searchParams.set('LAYER', l.name)
+        const data = {
+          layer: l,
+          type: 'image',
+          data: null
+        }
+        this.$http.get(url.toString()).then(resp => {
+          data.data = resp.data.nodes[0]
+        })
+        return data
+      })
     }
   }
 }

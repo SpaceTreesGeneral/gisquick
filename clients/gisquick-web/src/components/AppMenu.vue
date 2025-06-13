@@ -47,18 +47,20 @@ export default {
     },
     userMenuItems () {
       if (this.user && !this.user.is_guest) {
-        return [
-          {
-            key: 'logout',
-            text: this.$gettext('Logout'),
-            action: this.logout,
-            icon: 'logout'
-          }, {
+        const items = [{
+          key: 'logout',
+          text: this.$gettext('Logout'),
+          action: this.logout,
+          icon: 'logout'
+        }]
+        if (this.user.profile?.settings_access !== false) {
+          items.push({
             key: 'profile',
             text: this.$gettext('My profile'),
             link: '/user/'
-          }
-        ]
+          })
+        }
+        return items
       }
       return [{
         key: 'login',

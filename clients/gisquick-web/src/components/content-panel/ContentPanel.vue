@@ -94,7 +94,7 @@ import OverlaysOpacity from './OverlaysOpacity.vue'
 import BaseLayersTree from './BaseLayersTree.vue'
 import LayersTree from './LayersTree.vue'
 import TopicsList from './TopicsList.vue'
-import MapLegend from './Legend.vue'
+import MapLegend from './JsonLegend.vue'
 import { textMatcher } from '@/ui/utils/text'
 
 
