@@ -264,14 +264,14 @@ form {
   }
   .bg-logo {
     justify-self: end;
-    max-width: 30vw;
+    max-width: 50vw;
     overflow: hidden;
     height: 100%;
     width: 100%;
     background-repeat: no-repeat;
     background-position-x: left;
     background-position-y: center;
-    background-size: auto clamp(640px, 90vh, 900px);
+    background-size: auto clamp(600px, 100px, 1200vw);
     @media (max-width: 760px) {
       display: none;
     }
