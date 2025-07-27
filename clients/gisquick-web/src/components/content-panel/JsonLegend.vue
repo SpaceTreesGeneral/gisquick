@@ -12,7 +12,7 @@
         <translate>Error</translate>
       </div>
     </div>
-    <template v-for="{ type, layer, url, data} in legendList">
+    <template v-for="{ type, layer, url, data, duplicitTitle } in legendList">
       <div
         v-if="type === 'link'"
         :key="layer.name"
@@ -27,9 +27,9 @@
         class="item"
         :class="data.type"
       >
-        <span v-if="data.title" class="title" v-text="data.title"/>
+        <!-- <span v-if="data.title" class="title" v-text="data.title"/> -->
         <!-- without duplicit title -->
-        <!-- <span v-if="data.title && !data.icon" class="title" v-text="data.title"/> -->
+        <span v-if="!duplicitTitle" class="title" v-text="data.title"/>
         <div v-if="data.icon" class="symbol f-row">
           <div class="img-box">
             <img :src="`data:image/png;base64, ${data.icon}`"/>
@@ -163,7 +163,9 @@ export default {
           data: null
         }
         this.$http.get(url.toString()).then(resp => {
-          data.data = resp.data.nodes[0]
+          const ldata = resp.data.nodes[0]
+          data.data = ldata
+          data.duplicitTitle = ldata?.title === l.title || (ldata.symbols?.length === 1 && ldata.symbols[0].title === l.title)
         })
         return data
       })
