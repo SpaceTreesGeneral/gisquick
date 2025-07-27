@@ -48,7 +48,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import UserDashboard from '@/UserDashboard.vue'
+import UserDashboard from '@/SpacetreesDashboard.vue'
 import SvgLogo from '@/assets/text_logo_dark.svg?inline'
 import SvgMap from '@/assets/map.svg?inline'
 

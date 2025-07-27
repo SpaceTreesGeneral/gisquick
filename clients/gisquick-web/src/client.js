@@ -42,7 +42,8 @@ HTTP.project = function (project) {
   return new Promise((resolve, reject) => {
     const parts = project.split('/').length
     const url = parts === 1
-      ? `/api/map/alias/${project}`
+      // ? `/api/map/alias/${project}`
+      ? `/api/map/project/_/${project}`
       : `/api/map/project/${project}`
     const params = parts === 1 ? { domain: location.hostname } : null
     HTTP.get(url, { params })
