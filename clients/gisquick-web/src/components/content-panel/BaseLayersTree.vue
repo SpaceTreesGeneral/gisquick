@@ -30,8 +30,8 @@
         <v-checkbox
           class="f-grow"
           :label="item.title || item.name"
-          :value="value === item.name"
-          @input="$emit('input', value === item.name ? null : item.name)"
+          :value="isLayerVisible(item)"
+          @input="setLayerVisibility(item, $event)"
         />
         <v-btn class="icon flat small" @click="toggleLayerInfo(item)">
           <v-icon
@@ -66,16 +66,34 @@ export default {
   props: {
     collapsed: Array,
     layers: Array,
-    value: String
+    value: [String, Array]
   },
   data () {
     return {
       expandedLayer: null
     }
   },
+  computed: {
+    multiMode () {
+      return Array.isArray(this.value)
+    }
+  },
   methods: {
     toggleLayerInfo (layer) {
       this.expandedLayer = this.expandedLayer !== layer ? layer : null
+    },
+    isLayerVisible (layer) {
+      return this.multiMode ? this.value.includes(layer.name) : this.value === layer.name
+    },
+    setLayerVisibility (layer, visible) {
+      if (this.multiMode) {
+        const value = visible
+          ? this.value.concat(layer.name)
+          : this.value.filter(n => n !== layer.name)
+        this.$emit('input', value)
+      } else {
+        this.$emit('input', visible ? layer.name : null)
+      }
     }
   }
 }

@@ -16,7 +16,7 @@
             class="mt-2"
             :layers="project.baseLayers.tree"
             :collapsed.sync="collapsedBaseLayers"
-            :value="visibleBaseLayerName"
+            :value="visibleBaseLayersNames"
             @input="setBaseLayer"
           />
         </scroll-area>
@@ -122,9 +122,12 @@ export default {
   },
   computed: {
     ...mapState(['project']),
-    ...mapGetters(['visibleBaseLayer', 'visibleLayers']),
+    ...mapGetters(['visibleBaseLayer', 'visibleLayers', 'visibleBaseLayers']),
     visibleBaseLayerName () {
       return this.visibleBaseLayer && this.visibleBaseLayer.name
+    },
+    visibleBaseLayersNames () {
+      return this.visibleBaseLayers?.map(l => l.name)
     },
     topics () {
       return this.project.config.topics
@@ -189,7 +192,7 @@ export default {
   },
   methods: {
     setBaseLayer (name) {
-      this.$store.commit('visibleBaseLayer', name)
+      this.$store.commit(Array.isArray(name) ? 'visibleBaseLayers' : 'visibleBaseLayer', name)
     },
     async highlightResult () {
       const match = this.searchContext.matches[this.searchContext.index]

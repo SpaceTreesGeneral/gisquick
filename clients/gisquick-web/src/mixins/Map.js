@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     ...mapState(['project', 'activeTool']),
-    ...mapGetters(['visibleBaseLayer', 'visibleLayers']),
+    ...mapGetters(['visibleBaseLayer', 'visibleBaseLayers', 'visibleLayers']),
     mapLoading () {
       const { baseLayer, overlays, other } = this.status
       return baseLayer.loading || overlays.loading || other.some(i => i.loading)
@@ -47,7 +47,8 @@ export default {
   },
   watch: {
     visibleLayers: 'setVisibleLayers',
-    visibleBaseLayer: 'setVisibleBaseLayer'
+    // visibleBaseLayer: 'setVisibleBaseLayer',
+    visibleBaseLayers: 'setVisibleBaseLayers'
   },
   created () {
     const { config } = this.project
@@ -85,18 +86,14 @@ export default {
     }
 
     // base layer need to be initialized after ol map is created
-    let visibleBaseLayer
+    let visibleBaseLayers
     if (has(this.queryParams, 'baselayer')) { // baselayer can be empty string
-      visibleBaseLayer = this.project.baseLayers.list.find(l => l.name === this.queryParams.baselayer)
+      const names = this.queryParams.baselayer.split(',')
+      visibleBaseLayers = this.project.baseLayers.list.filter(l => names.includes(l.name))
     } else {
-      visibleBaseLayer = this.project.baseLayers.list.find(l => l.visible)
+      visibleBaseLayers = this.project.baseLayers.list.filter(l => l.visible)
     }
-    if (this.visibleBaseLayer !== visibleBaseLayer) {
-      this.$store.commit('visibleBaseLayer', visibleBaseLayer?.name)
-    } else {
-      this.setVisibleBaseLayer(visibleBaseLayer)
-    }
-    this.registerStatusListener(map.overlay, this.status.overlays)
+    this.$store.commit('visibleBaseLayers', visibleBaseLayers.map(l => l.name))
   },
   mounted () {
     const map = this.$map
@@ -160,7 +157,7 @@ export default {
         const params = {
           extent: extent.map(v => round(v, precision)).join(','),
           overlays: overlays.join(','),
-          baselayer: this.visibleBaseLayer?.name ?? '',
+          baselayer: this.visibleBaseLayers.map(l => l.name).join(','),
           ...toolParams
         }
         const url = new URL(location.href)
@@ -201,6 +198,23 @@ export default {
         this.unregisterBaseLayerListener?.()
         this.unregisterBaseLayerListener = this.registerStatusListener(baseLayer, this.status.baseLayer)
       }
+    },
+    async setVisibleBaseLayers (layers) {
+      const names = layers.map(l => l.name).reverse()
+      const baseLayers = this.$map?.getLayers().getArray().filter(l => l.get('type') === 'baselayer')
+      const opacity = baseLayers?.find(l => l.getVisible())?.getOpacity() ?? 1
+      baseLayers?.filter(l => !names.includes(l.get('name'))).forEach(l => l.setVisible(false))
+      for (const layer of layers) {
+        const baseLayer = await this.$map.getBaseLayer(layer.name)
+        baseLayer.setOpacity(opacity)
+        baseLayer.setVisible(true)
+      }
+      this.$map.getLayers().getArray().sort((l1, l2) => {
+        const i1 = l1.get('type') === 'baselayer' ? names.indexOf(l1.get('name')) : 100
+        const i2 = l2.get('type') === 'baselayer' ? names.indexOf(l2.get('name')) : 100
+        return i1 - i2
+      })
+      this.$map.render()
     },
     setVisibleLayers (layers) {
       this.$map.overlay.getSource().setVisibleLayers(layers.map(l => l.name))

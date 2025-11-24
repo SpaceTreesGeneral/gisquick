@@ -48,6 +48,7 @@ export default new Vuex.Store({
     project: null,
     activeTool: null,
     showLogin: false,
+    baseLayers: [],
     baseLayerName: null,
     location: null
   },
@@ -116,6 +117,9 @@ export default new Vuex.Store({
     visibleBaseLayer (state, name) {
       state.baseLayerName = name
     },
+    visibleBaseLayers (state, names) {
+      state.baseLayers = names
+    },
     groupVisibility (state, { group, visible }) {
       group.visible = visible
       const { groupVisibilityMode } = state.options
@@ -169,7 +173,12 @@ export default new Vuex.Store({
   },
   getters: {
     visibleBaseLayer: state => {
-      return state.project?.baseLayers?.list.find(l => l.name === state.baseLayerName)
+      // return state.project?.baseLayers?.list.find(l => l.name === state.baseLayerName)
+      return state.project?.baseLayers?.list.find(l => state.baseLayers.includes(l.name))
+    },
+    visibleBaseLayers: state => {
+      // return state.baseLayers.map(name => state.project?.baseLayers?.list.find(l => l.name === name)) // keep passed order
+      return state.project?.baseLayers?.list.filter(l => state.baseLayers.includes(l.name)) // keep project order
     },
     visibleLayers: state => {
       if (!state.project) {
