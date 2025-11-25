@@ -53,13 +53,11 @@ export default {
           action: this.logout,
           icon: 'logout'
         }]
-        if (this.user.profile?.settings_access !== false) {
-          items.push({
-            key: 'profile',
-            text: this.$gettext('My profile'),
-            link: '/user/'
-          })
-        }
+        items.push({
+          key: 'profile',
+          text: this.$gettext('My profile'),
+          link: this.user.profile?.settings_access === false ? '/' : '/user/'
+        })
         return items
       }
       return [{
