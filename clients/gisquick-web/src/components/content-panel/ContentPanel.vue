@@ -6,20 +6,31 @@
     <v-tabs-header :items="tabsItems" v-model="activeMainTab"/>
     <v-tabs class="f-grow" :items="tabsItems" v-model="activeMainTab">
       <template v-slot:base>
-        <scroll-area>
+        <div class="f-col baselayers-panel">
           <base-layer-opacity
             class="opacity-tool toolbar"
             @touchstart.native.stop=""
             @touchend.native.stop=""
           />
-          <base-layers-tree
-            class="mt-2"
-            :layers="project.baseLayers.tree"
-            :collapsed.sync="collapsedBaseLayers"
-            :value="visibleBaseLayersNames"
-            @input="setBaseLayer"
-          />
-        </scroll-area>
+          <scroll-area class="f-grow">
+            <base-layers-tree
+              class="mt-2"
+              :layers="project.baseLayers.tree"
+              :collapsed.sync="collapsedBaseLayers"
+              :value="visibleBaseLayersNames"
+              @input="setBaseLayer"
+            />
+          </scroll-area>
+          <!-- <hr class="mx-2"/> -->
+          <div v-if="visibleBaseLayersNames.length === 2" class="compare-toolbar f-row-ac">
+            <v-btn :color="compareMode ? 'primary' : ''" :class="{outlined: !compareMode}" @click="toggleCompare">
+              <!-- <v-icon name="map_compare" class="mr-2"/> -->
+              <v-icon name="flip-h" class="mr-2"/>
+              <translate>Compare layers</translate>
+            </v-btn>
+            <compare-tool v-if="compareMode" class="ml-auto" :layer="visibleBaseLayersNames[0]"/>
+          </div>
+        </div>
       </template>
       <template v-slot:overlays>
         <overlays-opacity
@@ -95,12 +106,14 @@ import BaseLayersTree from './BaseLayersTree.vue'
 import LayersTree from './LayersTree.vue'
 import TopicsList from './TopicsList.vue'
 import MapLegend from './JsonLegend.vue'
+import CompareTool from '@/components/CompareTool.vue'
+
 import { textMatcher } from '@/ui/utils/text'
 
 
 export default {
   name: 'content-panel',
-  components: { VTabs, VTabsHeader, TextTabsHeader, MapLegend, OverlaysOpacity, BaseLayerOpacity, LayersTree, BaseLayersTree, TopicsList },
+  components: { VTabs, VTabsHeader, TextTabsHeader, MapLegend, OverlaysOpacity, BaseLayerOpacity, LayersTree, BaseLayersTree, TopicsList, CompareTool },
   props: {
     attributeTableDisabled: Boolean
   },
@@ -117,7 +130,8 @@ export default {
         index: -1,
         matches: []
       },
-      highlight: null
+      highlight: null,
+      compareMode: false
     }
   },
   computed: {
@@ -240,6 +254,9 @@ export default {
       if (!this.filterMode && this.filterText) {
         this.findLayersTree(this.filterText)
       }
+    },
+    toggleCompare () {
+      this.compareMode = !this.compareMode
     }
   }
 }
@@ -276,6 +293,18 @@ export default {
     }
     :deep .scrollbar-track.vertical {
       margin-top: 31px;
+    }
+  }
+  :deep(.tab-content) {
+    flex-grow: 1;
+  }
+  .baselayers-panel {
+    flex-grow: 1;
+    max-height: 100%;
+  }
+  .compare-toolbar {
+    .btn {
+      height: 30px;
     }
   }
 }
