@@ -148,9 +148,9 @@ export default {
   computed: {
     images () {
       const config = this.project?.config?.app || {}
-      const logoImg = config.logo || require('../assets/image_logo.svg')
+      const logoImg = config.logo || require('../assets/image_logo.png')
       return {
-        textLogo: config.text_logo_dark || config.text_logo || require('../assets/text_logo_dark.svg'),
+        textLogo: config.text_logo_dark || config.text_logo || require('../assets/text_logo_dark.png'),
         imgLogoStyle: {
           'background-image': `url(${logoImg})`,
           ...config.login_logo_style
@@ -259,6 +259,8 @@ form {
   display: grid;
   align-items: center; // vertical
   grid-template-columns: auto 1fr;
+  --color-primary: rgb(93, 242, 200);
+  --color-primary-rgb: 93,242,200;
   &.no-logo {
     grid-template-columns: 1fr 0;
   }
