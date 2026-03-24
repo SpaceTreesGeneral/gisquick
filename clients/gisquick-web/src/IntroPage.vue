@@ -2,8 +2,8 @@
   <div class="page f-grow">
     <template v-if="!userSignedIn && !dashboardOnly">
       <div class="header f-col-ac f-justify-center px-2 shadow-2">
-        <!-- <img src="./assets/text_logo_dark.svg" class="logo my-4"/> -->
-        <svg-logo class="logo my-4"/>
+        <img src="./assets/text_logo_dark.png" class="my-2" height="40"/>
+        <!-- <svg-logo class="logo my-4"/> -->
       </div>
       <div class="main f-col-ac f-justify-center light">
         <translate tag="h1" class="my-4"> Welcome to the Gisquick </translate>
@@ -39,7 +39,8 @@
     </template>
     <template v-else>
       <div class="header-small f-col-ac f-justify-center p-2 shadow-2">
-        <svg-logo class="my-2" height="32"/>
+        <!-- <svg-logo class="my-2" height="32"/> -->
+        <img src="./assets/text_logo_dark.png" class="my-2" height="30"/>
       </div>
       <user-dashboard class="f-col f-grow"/>
     </template>
@@ -49,11 +50,11 @@
 <script>
 import { mapState } from 'vuex'
 import UserDashboard from '@/SpacetreesDashboard.vue'
-import SvgLogo from '@/assets/text_logo_dark.svg?inline'
+// import SvgLogo from '@/assets/text_logo_dark.svg?inline'
 import SvgMap from '@/assets/map.svg?inline'
 
 export default {
-  components: { UserDashboard, SvgLogo, SvgMap },
+  components: { UserDashboard, SvgMap },
   props: {
     dashboardOnly: Boolean
   },
