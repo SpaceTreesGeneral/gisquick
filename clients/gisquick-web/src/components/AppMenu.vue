@@ -56,7 +56,7 @@ export default {
         items.push({
           key: 'profile',
           text: this.$gettext('My profile'),
-          link: this.user.profile?.settings_access === false ? '/' : '/user/'
+          link: this.user.profile?.settings_access ? '/user/' : '/'
         })
         return items
       }
