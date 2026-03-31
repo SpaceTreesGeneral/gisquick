@@ -259,8 +259,6 @@ form {
   display: grid;
   align-items: center; // vertical
   grid-template-columns: auto 1fr;
-  --color-primary: rgb(93, 242, 200);
-  --color-primary-rgb: 93,242,200;
   &.no-logo {
     grid-template-columns: 1fr 0;
   }
@@ -273,7 +271,7 @@ form {
     background-repeat: no-repeat;
     background-position-x: left;
     background-position-y: center;
-    background-size: auto clamp(600px, 100px, 1200vw);
+    background-size: auto clamp(500px, 100px, 1200vw);
     @media (max-width: 760px) {
       display: none;
     }
