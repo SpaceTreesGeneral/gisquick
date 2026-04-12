@@ -2,7 +2,7 @@
   <div class="page f-grow">
     <template v-if="!userSignedIn && !dashboardOnly">
       <div class="header f-col-ac f-justify-center px-2 shadow-2">
-        <img src="./assets/text_logo_dark.png" class="my-2" height="40"/>
+        <img src="./assets/text_logo_dark.svg" class="my-2" height="40"/>
         <!-- <svg-logo class="logo my-4"/> -->
       </div>
       <div class="main f-col-ac f-justify-center light">
@@ -40,7 +40,7 @@
     <template v-else>
       <div class="header-small f-col-ac f-justify-center p-2 shadow-2">
         <!-- <svg-logo class="my-2" height="32"/> -->
-        <img src="./assets/text_logo_dark.png" class="my-2" height="30"/>
+        <img src="./assets/text_logo_dark.svg" class="my-2" height="30"/>
       </div>
       <user-dashboard class="f-col f-grow"/>
     </template>
